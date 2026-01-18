@@ -5,11 +5,11 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-  
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
+
   nixpkgs.config.allowUnfree = true;
 
   # Bootloader.
@@ -87,32 +87,48 @@
     isNormalUser = true;
     description = "Levi Butcher";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
+    packages = with pkgs;
+      [
+        #  thunderbird
+      ];
   };
+  users.defaultUserShell = pkgs.zsh;
 
-  # Install firefox.
   programs.firefox.enable = true;
+  programs.hyprland.enable = true;
+  programs.zsh = {
+    enable = true;
+    ohMyZsh = {
+      enable = true;
+      plugins = [ ];
+    };
+  };
+  programs.starship.enable = true;
+  programs.waybar.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
+  # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   environment.systemPackages = with pkgs; [
-   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-   neovim
-   kitty
-   discord
-   firefox
-   opencode
-   zsh
-   oh-my-zsh
-   ripgrep
-   go
-   rustup
-   btop
-   git
-   gcc
+    neovim
+    kitty
+    discord
+    opencode
+    ripgrep
+    go
+    rustup
+    btop
+    git
+    gcc
+    nodejs_24
+    wget
+    tmux
+    tmux-sessionizer
+    fzf
+    rofi
   ];
+
+  fonts.packages = with pkgs; [ nerd-fonts.fira-code ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -140,6 +156,5 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.11"; # Did you read the comment?
-
 
 }
