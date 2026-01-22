@@ -10,6 +10,8 @@
     ./hardware-configuration.nix
   ];
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   nixpkgs.config.allowUnfree = true;
 
   # Bootloader.
@@ -126,9 +128,46 @@
     tmux-sessionizer
     fzf
     rofi
+    unzip
+    fd
+    python315
+    lua
+    ranger
+    hyprcursor
   ];
 
   fonts.packages = with pkgs; [ nerd-fonts.fira-code ];
+
+  # Laptop configurations (need to optional include on desktop)
+  # powerManagement.enable = true;
+  services.power-profiles-daemon.enable = false; # Turn off if bat perf bad
+  services.tlp = {
+    enable = true;
+    settings = {
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+
+      CPU_MIN_PERF_ON_AC = 0;
+      CPU_MAX_PERF_ON_AC = 100;
+      CPU_MIN_PERF_ON_BAT = 0;
+      CPU_MAX_PERF_ON_BAT = 20;
+
+      # Optional helps save long term battery health
+      START_CHARGE_THRESH_BAT0 = 40; # 40 and below it starts to charge
+      STOP_CHARGE_THRESH_BAT0 = 80; # 80 and above it stops charging
+    };
+  };
+
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+
+  # Home Manager 
+  # home-manager.users.levi = { pkgs, ... }: { home.stateVersion = "25.11"; };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
