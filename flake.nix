@@ -11,13 +11,18 @@
       # to avoid problems caused by different versions of nixpkgs.
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    stylix = {
+      url = "github:nix-community/stylix/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs: {
     nixosConfigurations.exodia-fw = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };
       modules = [
+        stylix.nixosModules.stylix
         ./configuration.nix
 
         # home-manager setup`

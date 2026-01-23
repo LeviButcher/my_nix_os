@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, stylix, ... }:
 
 {
   imports = [
@@ -100,41 +100,23 @@
   programs.hyprland.enable = true;
   programs.zsh = {
     enable = true;
+    syntaxHighlighting.enable = true;
+    enableCompletion = true;
     ohMyZsh = {
       enable = true;
-      plugins = [ ];
+      plugins = [ "git" "fzf" ];
     };
+    # Need to figure out improvements to this
+    shellInit = ''
+      source ${pkgs.spaceship-prompt}/share/zsh/themes/spaceship.zsh-theme;
+    '';
   };
-  programs.starship.enable = true;
   programs.waybar.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  environment.systemPackages = with pkgs; [
-    neovim
-    kitty
-    discord
-    opencode
-    ripgrep
-    go
-    rustup
-    btop
-    git
-    gcc
-    nodejs_24
-    wget
-    tmux
-    tmux-sessionizer
-    fzf
-    rofi
-    unzip
-    fd
-    python315
-    lua
-    ranger
-    hyprcursor
-  ];
+  environment.systemPackages = with pkgs; [ wget spaceship-prompt ];
 
   fonts.packages = with pkgs; [ nerd-fonts.fira-code ];
 
@@ -166,9 +148,6 @@
     enable32Bit = true;
   };
 
-  # Home Manager 
-  # home-manager.users.levi = { pkgs, ... }: { home.stateVersion = "25.11"; };
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -176,6 +155,18 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+
+  stylix = with pkgs; {
+    enable = true;
+    base16Scheme = "${base16-schemes}/share/themes/rose-pine-moon.yaml";
+
+    fonts = {
+      monospace = {
+        package = nerd-fonts.fira-code;
+        name = "FiraCode Nerd Font";
+      };
+    };
+  };
 
   # List services that you want to enable:
 
