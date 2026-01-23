@@ -166,6 +166,7 @@
         name = "FiraCode Nerd Font";
       };
     };
+
   };
 
   # List services that you want to enable:

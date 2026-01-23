@@ -4,6 +4,8 @@
   home.username = "levib";
   home.homeDirectory = "/home/levib";
 
+  xdg.enable = true;
+
   # Import files from the current configuration directory into the Nix store,
   # and create symbolic links pointing to those store files in the Home directory.
 
@@ -69,7 +71,6 @@
     zstd
     gnupg
     discord
-    neovim
 
     # nix related
     #
@@ -118,6 +119,26 @@
       core.editor = "nvim";
     };
   };
+
+    stylix.targets.neovim.enable = false;
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    vimAlias = true;
+    viAlias = true;
+    # extraConfigLua = builtins.readFile ./dotfiles/nvim/init.lua;
+  };
+
+  home.file.".config/nvim" = {
+    source = ./dotfiles/nvim;
+    recursive = true;
+  };
+
+  # wayland.windowManager.hyprland = {
+  #   enable = true;
+  #   package = null;
+  #   portalPackage = null;
+  # };
 
   # # starship - an customizable prompt for any shell
   # programs.starship = {
