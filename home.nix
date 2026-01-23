@@ -120,7 +120,7 @@
     };
   };
 
-    stylix.targets.neovim.enable = false;
+  stylix.targets.neovim.enable = false;
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -129,10 +129,16 @@
     # extraConfigLua = builtins.readFile ./dotfiles/nvim/init.lua;
   };
 
-  home.file.".config/nvim" = {
-    source = ./dotfiles/nvim;
+  xdg.configFile.nvim = {
+    source = config.lib.file.mkOutOfStoreSymlink
+      "/home/levib/Projects/my_nix_os/dotfiles/nvim";
     recursive = true;
   };
+
+  # home.file.".config/nvim/" = {
+  #  source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/nvim; 
+  #  recursive = true;
+  # };
 
   # wayland.windowManager.hyprland = {
   #   enable = true;
