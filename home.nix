@@ -1,4 +1,4 @@
-{ config, pkgs, stylix, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   home.username = "levib";
@@ -6,23 +6,12 @@
 
   xdg.enable = true;
 
+  imports = [ inputs.zen-browser.homeModules.beta ];
+
   # Import files from the current configuration directory into the Nix store,
   # and create symbolic links pointing to those store files in the Home directory.
 
   # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
-
-  # Import the scripts directory into the Nix store,
-  # and recursively generate symbolic links in the Home directory pointing to the files in the store.
-  # home.file.".config/i3/scripts" = {
-  #   source = ./scripts;
-  #   recursive = true;   # link recursively
-  #   executable = true;  # make all files executable
-  # };
-
-  # encode the file content in nix configuration file directly
-  # home.file.".xxx".text = ''
-  #     xxx
-  # '';
 
   # set cursor size and dpi for 4k monitor
   xresources.properties = {
@@ -46,7 +35,7 @@
     yq-go # yaml processor https://github.com/mikefarah/yq
     eza # A modern replacement for ‘ls’
     fzf # A command-line fuzzy finder
-    rofi
+    yofi
     fd
     ranger
 
@@ -83,6 +72,7 @@
     opencode
     tmux
     tmux-sessionizer
+    hyprpicker
 
     btop # replacement of htop/nmon
     iotop # io monitoring
@@ -129,34 +119,26 @@
     # extraConfigLua = builtins.readFile ./dotfiles/nvim/init.lua;
   };
 
+  # DotFiles copy
   xdg.configFile.nvim = {
     source = config.lib.file.mkOutOfStoreSymlink
       "/home/levib/Projects/my_nix_os/dotfiles/nvim";
     recursive = true;
   };
-
-  # home.file.".config/nvim/" = {
-  #  source = config.lib.file.mkOutOfStoreSymlink ../dotfiles/nvim; 
-  #  recursive = true;
-  # };
-
-  # wayland.windowManager.hyprland = {
-  #   enable = true;
-  #   package = null;
-  #   portalPackage = null;
-  # };
-
-  # # starship - an customizable prompt for any shell
-  # programs.starship = {
-  #   enable = true;
-  #   # custom settings
-  #   settings = {
-  #     add_newline = false;
-  #     aws.disabled = true;
-  #     gcloud.disabled = true;
-  #     line_break.disabled = true;
-  #   };
-  # };
+  xdg.configFile.tmux = {
+    source = config.lib.file.mkOutOfStoreSymlink
+      "/home/levib/Projects/my_nix_os/dotfiles/tmux";
+    recursive = true;
+  };
+  xdg.configFile."hypr/hyprland.conf" = {
+    source = config.lib.file.mkOutOfStoreSymlink
+      "/home/levib/Projects/my_nix_os/dotfiles/hypr/hyprland.conf";
+  };
+  xdg.configFile.waybar = {
+    source = config.lib.file.mkOutOfStoreSymlink
+      "/home/levib/Projects/my_nix_os/dotfiles/waybar";
+    recursive = true;
+  };
 
   # alacritty - a cross-platform, GPU-accelerated terminal emulator
   programs.alacritty = {
@@ -168,6 +150,45 @@
       selection.save_to_clipboard = true;
     };
   };
+
+  programs.zen-browser.enable = true;
+
+  # Need to extract hyprland config to prevent conflicts
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      preload = [ "/home/levib/Wallpapers/something_in_the_woods.png" ];
+      wallpaper = [
+        # By display
+        #"DP-2,~/wallpapers/wallpaper2.jpg"
+        # By default/fallback
+        ",/home/levib/Wallpapers/something_in_the_woods.png"
+      ];
+    };
+  };
+
+  # services.hypridle = {
+  #   enable = true;
+  #   settings = {
+  #     general = {
+  #       after_sleep_cmd = "hyprctl dispatch dpms on";
+  #       ignore_dbus_inhibit = false;
+  #       lock_cmd = "hyprlock";
+  #     };
+  #
+  #     listener = [
+  #       {
+  #         timeout = 900;
+  #         on-timeout = "hyprlock";
+  #       }
+  #       {
+  #         timeout = 1200;
+  #         on-timeout = "hyprctl dispatch dpms off";
+  #         on-resume = "hyprctl dispatch dpms on";
+  #       }
+  #     ];
+  #   };
+  # };
 
   # This value determines the home Manager release that your
   # configuration is compatible with. This helps avoid breakage
