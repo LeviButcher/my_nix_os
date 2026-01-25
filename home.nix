@@ -33,7 +33,6 @@
     ripgrep # recursively searches directories for a regex pattern
     jq # A lightweight and flexible command-line JSON processor
     yq-go # yaml processor https://github.com/mikefarah/yq
-    eza # A modern replacement for ‘ls’
     fzf # A command-line fuzzy finder
     yofi
     fd
@@ -153,42 +152,26 @@
 
   programs.zen-browser.enable = true;
 
-  # Need to extract hyprland config to prevent conflicts
+  stylix.targets.hyprpanel.enable = false;
+  programs.hyprpanel = {
+    enable = true;
+    settings = {
+      scalingPriority = "hyprland";
+      # theme.bar.transparent = true;
+      theme.font = {
+        name = "FiraCode Nerd Font";
+        size = "14px";
+      };
+    };
+  };
+
   services.hyprpaper = {
     enable = true;
     settings = {
       preload = [ "/home/levib/Wallpapers/something_in_the_woods.png" ];
-      wallpaper = [
-        # By display
-        #"DP-2,~/wallpapers/wallpaper2.jpg"
-        # By default/fallback
-        ",/home/levib/Wallpapers/something_in_the_woods.png"
-      ];
+      wallpaper = [ ",/home/levib/Wallpapers/something_in_the_woods.png" ];
     };
   };
-
-  # services.hypridle = {
-  #   enable = true;
-  #   settings = {
-  #     general = {
-  #       after_sleep_cmd = "hyprctl dispatch dpms on";
-  #       ignore_dbus_inhibit = false;
-  #       lock_cmd = "hyprlock";
-  #     };
-  #
-  #     listener = [
-  #       {
-  #         timeout = 900;
-  #         on-timeout = "hyprlock";
-  #       }
-  #       {
-  #         timeout = 1200;
-  #         on-timeout = "hyprctl dispatch dpms off";
-  #         on-resume = "hyprctl dispatch dpms on";
-  #       }
-  #     ];
-  #   };
-  # };
 
   # This value determines the home Manager release that your
   # configuration is compatible with. This helps avoid breakage

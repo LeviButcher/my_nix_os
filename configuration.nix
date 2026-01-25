@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, stylix, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -53,7 +53,6 @@
     enable = true;
     xwayland.enable = true;
   };
-  programs.waybar.enable = true;
   programs.hyprlock.enable = true;
 
   # Configure keymap in X11
@@ -79,6 +78,13 @@
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
+  };
+
+  # Bluetooth
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = { General = { Experimental = true; }; };
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -113,37 +119,20 @@
     wget
     spaceship-prompt
     rose-pine-hyprcursor
+    bluez
+    bluez-tools
   ];
 
-  fonts.packages = with pkgs; [ nerd-fonts.fira-code ];
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
+    nerd-fonts.jetbrains-mono
+  ];
 
-  # Laptop configurations (need to optional include on desktop)
-  # powerManagement.enable = true;
-  services.power-profiles-daemon.enable = false; # Turn off if bat perf bad
-  services.tlp = {
-    enable = true;
-    settings = {
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+  powerManagement.powertop.enable = true;
+  services.power-profiles-daemon.enable = true;
+  services.upower.enable = true;
 
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-
-      CPU_MIN_PERF_ON_AC = 0;
-      CPU_MAX_PERF_ON_AC = 100;
-      CPU_MIN_PERF_ON_BAT = 0;
-      CPU_MAX_PERF_ON_BAT = 20;
-
-      # Optional helps save long term battery health
-      START_CHARGE_THRESH_BAT0 = 40; # 40 and below it starts to charge
-      STOP_CHARGE_THRESH_BAT0 = 80; # 80 and above it stops charging
-    };
-  };
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
+  hardware.graphics.enable = true;
 
   stylix = with pkgs; {
     enable = true;
