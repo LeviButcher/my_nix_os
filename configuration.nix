@@ -48,12 +48,22 @@
   services.xserver.enable = true;
 
   # Display Managers/Window Manager
-  services.displayManager.ly.enable = true;
+  services.displayManager.sddm = {
+    enable = true;
+    theme = "sddm-astronaut-theme";
+    settings = { };
+    enableHidpi = true;
+    extraPackages = [ pkgs.sddm-astronaut ];
+  };
+
+  environment.pathsToLink =
+    [ "/share/applications" "/share/xdg-desktop-portal" ];
+
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
+    withUWSM = true;
   };
-  programs.hyprlock.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -106,6 +116,7 @@
       enable = true;
       plugins = [ "git" "fzf" ];
     };
+    enableLsColors = true;
     # Need to figure out improvements to this
     shellInit = ''
       source ${pkgs.spaceship-prompt}/share/zsh/themes/spaceship.zsh-theme;
@@ -119,8 +130,7 @@
     wget
     spaceship-prompt
     rose-pine-hyprcursor
-    bluez
-    bluez-tools
+    sddm-astronaut
   ];
 
   fonts.packages = with pkgs; [

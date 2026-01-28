@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   home.username = "levib";
@@ -6,7 +6,8 @@
 
   xdg.enable = true;
 
-  imports = [ inputs.zen-browser.homeModules.beta ];
+  imports =
+    [ inputs.zen-browser.homeModules.beta ./hypr/hypr.nix ./dev/dev.nix ];
 
   # Import files from the current configuration directory into the Nix store,
   # and create symbolic links pointing to those store files in the Home directory.
@@ -69,9 +70,6 @@
     # productivity
     glow # markdown previewer in terminal
     opencode
-    tmux
-    tmux-sessionizer
-    hyprpicker
 
     btop # replacement of htop/nmon
     iotop # io monitoring
@@ -88,15 +86,6 @@
     ethtool
     pciutils # lspci
     usbutils # lsusb
-
-    # Languages
-    go
-    rustup
-    gcc
-    nodejs_24
-    python315
-    lua
-
   ];
 
   # basic configuration of git, please change to your own
@@ -109,69 +98,7 @@
     };
   };
 
-  stylix.targets.neovim.enable = false;
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    vimAlias = true;
-    viAlias = true;
-    # extraConfigLua = builtins.readFile ./dotfiles/nvim/init.lua;
-  };
-
-  # DotFiles copy
-  xdg.configFile.nvim = {
-    source = config.lib.file.mkOutOfStoreSymlink
-      "/home/levib/Projects/my_nix_os/dotfiles/nvim";
-    recursive = true;
-  };
-  xdg.configFile.tmux = {
-    source = config.lib.file.mkOutOfStoreSymlink
-      "/home/levib/Projects/my_nix_os/dotfiles/tmux";
-    recursive = true;
-  };
-  xdg.configFile."hypr/hyprland.conf" = {
-    source = config.lib.file.mkOutOfStoreSymlink
-      "/home/levib/Projects/my_nix_os/dotfiles/hypr/hyprland.conf";
-  };
-  xdg.configFile.waybar = {
-    source = config.lib.file.mkOutOfStoreSymlink
-      "/home/levib/Projects/my_nix_os/dotfiles/waybar";
-    recursive = true;
-  };
-
-  # alacritty - a cross-platform, GPU-accelerated terminal emulator
-  programs.alacritty = {
-    enable = true;
-    # custom settings
-    settings = {
-      env.TERM = "xterm-256color";
-      scrolling.multiplier = 5;
-      selection.save_to_clipboard = true;
-    };
-  };
-
   programs.zen-browser.enable = true;
-
-  stylix.targets.hyprpanel.enable = false;
-  programs.hyprpanel = {
-    enable = true;
-    settings = {
-      scalingPriority = "hyprland";
-      # theme.bar.transparent = true;
-      theme.font = {
-        name = "FiraCode Nerd Font";
-        size = "14px";
-      };
-    };
-  };
-
-  services.hyprpaper = {
-    enable = true;
-    settings = {
-      preload = [ "/home/levib/Wallpapers/something_in_the_woods.png" ];
-      wallpaper = [ ",/home/levib/Wallpapers/something_in_the_woods.png" ];
-    };
-  };
 
   # This value determines the home Manager release that your
   # configuration is compatible with. This helps avoid breakage
