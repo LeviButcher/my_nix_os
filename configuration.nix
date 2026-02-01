@@ -112,16 +112,17 @@
     enable = true;
     syntaxHighlighting.enable = true;
     enableCompletion = true;
-    ohMyZsh = {
-      enable = true;
-      plugins = [ "git" "fzf" ];
-    };
+    # ohMyZsh = {
+    #   enable = true;
+    #   plugins = [ "git" "fzf" ];
+    # };
     enableLsColors = true;
     # Need to figure out improvements to this
-    shellInit = ''
-      source ${pkgs.spaceship-prompt}/share/zsh/themes/spaceship.zsh-theme;
-    '';
+    # shellInit = ''
+    #   source ${pkgs.spaceship-prompt}/share/zsh/themes/spaceship.zsh-theme;
+    # '';
   };
+  programs.starship.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -136,6 +137,7 @@
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
     nerd-fonts.jetbrains-mono
+    nerd-fonts.noto
   ];
 
   powerManagement.powertop.enable = true;
@@ -143,19 +145,20 @@
   services.upower.enable = true;
 
   hardware.graphics.enable = true;
+  programs.nix-ld.enable = true; # Fixes dynamically linked exe
 
-  stylix = with pkgs; {
-    enable = true;
-    base16Scheme = "${base16-schemes}/share/themes/rose-pine-moon.yaml";
-
-    fonts = {
-      monospace = {
-        package = nerd-fonts.fira-code;
-        name = "FiraCode Nerd Font";
-      };
-    };
-
-  };
+  # stylix = with pkgs; {
+  #   enable = true;
+  #   base16Scheme = "${base16-schemes}/share/themes/tokyo-night-dark.yaml";
+  #
+  #   fonts = {
+  #     monospace = {
+  #       package = nerd-fonts.fira-code;
+  #       name = "FiraCode Nerd Font";
+  #     };
+  #   };
+  #
+  # };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

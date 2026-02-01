@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   home.packages = with pkgs; [
@@ -15,15 +15,15 @@
     plugins = [ ];
   };
 
-  stylix.targets.hyprlock.enable = false;
+  # stylix.targets.hyprlock.enable = false;
   programs.hyprlock.enable = true;
 
   xdg.configFile."hypr/hyprland.conf" = {
     source = config.lib.file.mkOutOfStoreSymlink
-      "/home/levib/Projects/my_nix_os/dotfiles/hypr/hyprland.conf";
+      "/home/levib/Projects/dotfiles/hypr/hyprland.conf";
   };
 
-  stylix.targets.hyprpanel.enable = false;
+  # stylix.targets.hyprpanel.enable = false;
   programs.hyprpanel = {
     enable = true;
     settings = {
@@ -36,7 +36,7 @@
     };
   };
 
-  stylix.targets.hyprpaper.enable = false;
+  # stylix.targets.hyprpaper.enable = false;
   services.hyprpaper = {
     enable = true;
     settings = {

@@ -25,9 +25,10 @@
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
       };
-
     };
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
+
 
   outputs = { self, nixpkgs, home-manager, stylix, zen-browser, ... }@inputs: {
     nixosConfigurations.exodia-fw = nixpkgs.lib.nixosSystem {
